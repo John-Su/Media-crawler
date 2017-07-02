@@ -1,4 +1,4 @@
-#! env: python3
+#i! env: python3
 #! -*- coding:utf-8 -*-
 import requests
 from bs4 import BeautifulSoup
@@ -29,7 +29,9 @@ class crawler():
             return inside_url_list, outside_url_list, tor_list, source_list
         for node in page.select('[href]'):
             url = node.get('href')
-            if url.startswith('/'): 
+            if url.startswith('/') or url.startswith('./'): 
+                if (url.startswith('./')):
+                    url = url[1:]
                 if url.endswith('.torrent'):
                     name = page.find('title').text
                     tor_list.add(self.url + url + ": " + name)
@@ -40,14 +42,53 @@ class crawler():
             elif self.rootPath in url:
                 if url.endswith('.torrent'):
                     name = page.find('title').text
-                    print (url+ ": " + name)
                     tor_list.add(url+ ": " + name)
-                elif not (url.endswith('.html') or url.endswith('.htm')):
+                elif re.match(sourcePattern,url):
                     source_list.add(url)
                 else:
                     inside_url_list.add(url)
             elif url.startswith('http'):
+                url = url.split("://")[1]
+                url = url.split('/')[0]
+                if len(re.findall(r'\.',url)) > 1:
+                    url = re.search(r'.*\.+(.*\..*)',url).group(1)
+                else:
+                    pass
+                if url.startswith('https'):
+                    url = 'https://' + url
+                else:
+                    url = 'http://' + url
                 outside_url_list.add(url)
+        for node in page.select('[src]'):
+            url = node.get('src')
+            if url.startswith('/') or url.startswith('./'): 
+                if (url.startswith('./')):
+                    url = url[1:]
+                if url.endswith('.torrent'):
+                    name = page.find('title').text
+                    tor_list.add(self.url + url + ": " + name)
+                elif re.match(sourcePattern,url):
+                    source_list.add(self.url + url)
+                else:
+                    inside_url_list.add(self.url + url)
+            elif not url.startswith('http'): 
+                if url.endswith('.torrent'):
+                    name = page.find('title').text
+                    tor_list.add(self.url + '/' + url + ": " + name)
+                elif re.match(sourcePattern,url):
+                    source_list.add(self.url + '/'  + url)
+                else:
+                    inside_url_list.add(self.url + '/'  + url)
+            elif url.startswith('http'): 
+                if url.endswith('.torrent'):
+                    name = page.find('title').text
+                    tor_list.add(url + ": " + name)
+                elif re.match(sourcePattern,url):
+                    source_list.add(url)
+                else:
+                    inside_url_list.add(url)
+            
+
         return inside_url_list, outside_url_list, tor_list, source_list
 
 
