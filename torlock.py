@@ -19,9 +19,9 @@ class webSite():
         rootPath = url[1] if len(url) > 1 else url[0]
         rootPath = rootPath.split('/')[0]
         if len(re.findall(r'\.',rootPath)) > 1:
-       	        self.rootPath = re.search(r'.*\.+(.*\..*)',rootPath).group(1)
+       	        self.rootPath ='output/' + re.search(r'.*\.+(.*\..*)',rootPath).group(1)
         else: 
-	        self.rootPath = rootPath
+	        self.rootPath ='output/' +rootPath
         self.spider = Crawler.crawler(self.url,self.rootPath)
         self.basepage = self.spider.basePage
         try:
@@ -79,6 +79,14 @@ class webSite():
         fp = codecs.open(self.rootPath + filename,'w','utf-8')
         fp.write('\n')
         for site in self.outside_list:
+            fp.write('['+time.strftime(timeFormat,time.localtime(time.time()))+'] ')
+            fp.write(site + '\n')
+        fp.close()
+
+    def save_inSide(self,filename = "/inside.txt"):
+        fp = codecs.open(self.rootPath + filename,'w','utf-8')
+        fp.write('\n')
+        for site in self.inside_list:
             fp.write('['+time.strftime(timeFormat,time.localtime(time.time()))+'] ')
             fp.write(site + '\n')
         fp.close()

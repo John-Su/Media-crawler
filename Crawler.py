@@ -12,6 +12,12 @@ class crawler():
         self.session = requests.session()
         self.basePage = self.crawl_page(self.url)
         self.rootPath = rootPath
+        headers = {'Accept': '*/*',
+               'Accept-Encoding': 'gzip, deflate, sdch, br',
+               'Accept-Language': 'zh-CN,zh;q=0.8',
+               'Connection': 'keep-alive',
+               'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/55.0.2883.87  Safari/537.36'}
+        self.session.headers = headers
     
     def crawl_page(self,url):
         try:
@@ -49,6 +55,7 @@ class crawler():
                     inside_url_list.add(url)
             elif url.startswith('http'):
                 url = url.split("://")[1]
+                url = url.replace('?','/')
                 url = url.split('/')[0]
                 if len(re.findall(r'\.',url)) > 1:
                     url = re.search(r'.*\.+(.*\..*)',url).group(1)
