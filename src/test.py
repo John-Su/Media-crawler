@@ -1,9 +1,9 @@
 import website
 
 Crawled=set()
-website = 'http://bbc.com'
-def pealthesite(website):
-	s = website.webSite(website)
+site = 'http://bbc.com'
+def pealthesite(site):
+	s = website.webSite(site)
 	s.crawl(s.url)
 	if len(s.tor_list) > 1:
 		s.save_tor()
@@ -14,7 +14,7 @@ def pealthesite(website):
 	if len(s.inside_list) > 1:
 		s.save_inSide()
 	Crawled.add(s.url)
-	if len(Crawled) > 20:
+	if len(Crawled) > 0:
 		exit()
 	n = 0
 	for url in s.outside_list.difference(Crawled):
@@ -27,4 +27,4 @@ def pealthesite(website):
 		if (n > 10):
 			break
 
-pealthesite(website)
+pealthesite(site)

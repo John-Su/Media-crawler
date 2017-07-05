@@ -5,6 +5,7 @@ import os
 import time
 import codecs
 import re
+import urllib.parse as parse
 timeFormat = '%Y-%m-%d %H:%M:%S'
 
 class webSite():
