@@ -6,6 +6,7 @@ import struct
 import numpy as np
 import os
 
+total = 0
 class suSparse():
 
 	def __init__(self, container = {}, dem = [128,128], dft = 0, sparsedir = 'sparce/', cachemax = 100000, filemax = 100000, head = 'matrix'):
@@ -20,6 +21,7 @@ class suSparse():
 		if not os.path.isdir(sparsedir):
 			os.mkdir(sparsedir)
 		self._nums = self._getnums()
+		print( self._nums)
 
 	def setitem(self, index, value = 1):
 		sub,filename = self._sub(index)
@@ -43,17 +45,20 @@ class suSparse():
 		self._setnums()
 
 	def _getnums(self):
-		filename = self._head + str(self._dem) + '_nums.txt'
+		filename = self._head + '_nums.txt'
 		try:
-			fp = open(filename,'r')
-			return int(fp.read())
+			fp = open(self._sparsedir + filename,'r')
+			nums = fp.read()
+			fp.close()
+			return int(nums)
 		except:
 			return 0
 	def _setnums(self):
-		filename = self._head + str(self._dem) + '_nums.txt'
+		filename = self._head + '_nums.txt'
 		try:
 			fp = open(self._sparsedir+filename,'w')
 			fp.write(str(self._nums))
+			fp.close()
 		except:
 			raise FileOpenError('open file failed')
 

@@ -25,10 +25,12 @@ class webSite():
 	        self.rootPath ='output/' +rootPath
         self.spider = Crawler.crawler(self.url,self.rootPath)
         self.basepage = self.spider.basePage
+        '''
         try:
                 os.mkdir(self.rootPath)
         except Exception:
                 pass
+        '''
 
 
         
